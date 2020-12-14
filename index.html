@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+    <META HTTP-EQUIV="EXPIRES" CONTENT="0">
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="no-cache, no-store, must-revalidate">
+    <META HTTP-EQUIV="expires" CONTENT="Wed, 26 Feb 1997 08:21:57 GMT"> 
+
+    <title>IoTtalk Video Control</title>
+    
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+	<link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+	<link rel="icon" href="./favicon.ico" type="image/x-icon">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="js/kurento-client.js"></script>
+    <script src="js/kurento-utils.js"></script>
+    <script src="./js/console.js"></script>
+    <script src="./js/index.js"></script>
+    <script src="js/scripts.js"></script>
+    
+  </head>
+  <body onunload="bodyOnUnload();" style="background-color: #e9e9e9;">
+    <div class="container-fluid">
+	  <div class="row">
+		<div class="col-sm-7">
+			<div class="row">
+			  <div class="col-sm-12">
+                <div id="videoFSContainer" class="img-rounded">
+			      <video id="videoOutput" muted autoplay class="img-rounded"></video>
+			    </div>
+			  </div>
+			</div>
+
+			<div class="row">
+			  <div class="col-sm-12">
+			    <input style="width:350px; display:none;" id="address" type="text">
+			    <a id="start" href="#" class="btn btn-success" style="display:none;">
+			    <span class="glyphicon glyphicon-play" style="display:none;"></span></a>
+			    <a id="stop" href="#" class="btn btn-danger" style="display:none;">
+			    <span class="glyphicon glyphicon-stop" style="display:none;"></span></a>
+			    <div id="console" style="display:none;"></div>
+			  </div>
+			</div>	
+
+
+ <div class="row">
+  <div class="col-sm-12">							 
+
+   <form id="fSelectPreset" target="retframe" accept-charset="UTF-8" method="get" action='http://' + ADDR_IP_CAM + ':' + PORT_IP_CAM_API + '/cgi-bin/viewer/recall.cgi' onload='fGetPresetOptions();'>
+         <div class="form-group">								  
+        <select class="form-control" id="sel-preset" onchange="fSelectPreset();">
+          <option value="-1">-- Select The Preset Location --</option>
+          <option value="0">livingroom</option>
+          <option value="1">Window</option>
+          <option value="2">Fan</option>
+        </select>
+      </div>
+   </form>
+  </div>
+ </div>
+		  <div class="row">
+        <div class="col-xs-2">
+				  <input type="button" class="btn btn-block btn-success btn-sm btn-ptz" onclick="CamControl('zoom', 'tele')" style="background-image:url('./img/zoom-in.png');">
+			  </div>
+        <div class="col-xs-2">
+          <input type="button" class="btn btn-block btn-success btn-sm btn-ptz" onclick="CamControl('zoom', 'wide')" style="background-image:url('./img/zoom-out.png');">
+        </div>
+        <div class="col-xs-2">
+          <input type="button" class="btn btn-block btn-primary btn-sm btn-ptz" onclick="CamControl('move', 'up')" style="background-image:url('./img/arrow-up.png');">
+        </div>
+        <div class="col-xs-2">
+          <input type="button" class="btn btn-block btn-primary btn-sm btn-ptz" onclick="CamControl('move', 'down')" style="background-image:url('./img/arrow-down.png');">
+        </div>
+        <div class="col-xs-2">
+          <input type="button" class="btn btn-block btn-warning btn-sm btn-ptz" onclick="CamControl('move', 'left')" style="background-image:url('./img/arrow-left.png');">
+        </div>
+        <div class="col-xs-2">
+          <input type="button" class="btn btn-block btn-warning btn-sm btn-ptz" onclick="CamControl('move', 'right')" style="background-image:url('./img/arrow-right.png');">
+        </div>
+      </div>
+      <div class="row" style="text-align:center;margin-top: 5px;">
+        <img id="Img1" src="./Gallery/orchid1.jpg" class="img-rounded"  border="5px" width="15%">
+        <div id="Modal1" class="modal">
+          <span id="close1" class="close">&times;</span>
+          <img class="modal-content" id="img01">
+          <div id="caption1"></div>
+        </div>
+
+        <img id="Img2" src="./Gallery/orchid2.jpg" class="img-rounded"  border="5px" width="15%">
+        <div id="Modal2" class="modal">
+          <span id="close2" class="close">&times;</span>
+          <img class="modal-content" id="img02">
+          <div id="caption2"></div>
+        </div>
+
+        <img id="Img3" src="./Gallery/orchid3.jpg" class="img-rounded"  border="5px" width="15%">
+        <div id="Modal3" class="modal">
+          <span id="close3" class="close">&times;</span>
+          <img class="modal-content" id="img03">
+          <div id="caption3"></div>
+        </div>
+
+        <img id="Img4" src="./Gallery/orchid4.jpg" class="img-rounded"  border="5px" width="15%">
+        <div id="Modal4" class="modal">
+          <span id="close4" class="close">&times;</span>
+          <img class="modal-content" id="img04">
+          <div id="caption4"></div>
+        </div>
+
+        <img id="Img5" src="./Gallery/orchid5.jpg" class="img-rounded"  border="5px" width="15%">
+        <div id="Modal5" class="modal">
+          <span id="close5" class="close">&times;</span>
+          <img class="modal-content" id="img05">
+          <div id="caption5"></div>
+        </div>
+        <!-- <a href="./Gallery/orchid1.jpg"><img src="./Gallery/orchid1.jpg" class="img-rounded"  border="5px" width="15%"></a> -->
+        <!-- <a href="./Gallery/orchid2.jpg"><img src="./Gallery/orchid2.jpg" class="img-rounded"  border="5px" width="15%"></a>
+        <a href="./Gallery/orchid3.jpg"><img src="./Gallery/orchid3.jpg" class="img-rounded"  border="5px" width="15%"></a>
+        <a href="./Gallery/orchid4.jpg"><img src="./Gallery/orchid4.jpg" class="img-rounded"  border="5px" width="15%"></a>
+        <a href="./Gallery/orchid5.jpg"><img src="./Gallery/orchid5.jpg" class="img-rounded"  border="5px" width="15%"></a> -->
+        <a href="https://www.youtube.com/watch?v=ftilGAzPEds" target="_blank"><img src="./Gallery/orchid6.jpg" class="img-rounded"  border="5px" width="15%"></a>
+      </div>
+	</div>
+		<div class="row">
+		  <div class="col-sm-5">
+				<iframe id="remotecontrol" style="height:70%; width:100%;" frameborder="0" allowtransparency="true"  scrolling="yes"></iframe>
+				<iframe id="remotecontrol2" style="height:57%; width:100%;" frameborder="0" allowtransparency="true"  scrolling="yes"></iframe>
+				<script>
+				    document.getElementById("remotecontrol").src = ADDR_REMOTE_CONTROL;
+				    document.getElementById("remotecontrol2").src = ADDR_REMOTE_CONTROL2;
+				</script>
+		  </div>
+		</div>
+	</div>
+	    <iframe id="retframe" name="retframe" frameborder="0" style="display:none;"></iframe>
+
+	<!-- Creates the Full screen Overlay Navigation -->
+    <div id="myNav" class="overlay">
+	  <div class="overlay-content"></div>
+    </div>
+
+
+    <script>
+      // Get the modal
+      var modal1 = document.getElementById("Modal1");
+      
+      // Get the image and insert it inside the modal - use its "alt" text as a caption
+      var img1 = document.getElementById("Img1");
+      var modalImg1 = document.getElementById("img01");
+      var captionText1 = document.getElementById("caption1");
+      img1.onclick = function(){
+        modal1.style.display = "block";
+        modalImg1.src = this.src;
+        captionText1.innerHTML = this.alt;
+      }
+      
+      // Get the <span> element that closes the modal
+      var span1 = document.getElementById("close1");
+      
+      // When the user clicks on <span> (x), close the modal
+      span1.onclick = function() { 
+        console.log("hhh");
+        modal1.style.display = "none";
+      }
+      var img2 = document.getElementById("Img2");
+      var img3 = document.getElementById("Img3");
+      var img4 = document.getElementById("Img4");
+      var img5 = document.getElementById("Img5");
+      
+
+      img2.onclick = function(){
+        modal1.style.display = "block";
+        modalImg1.src = this.src;
+        captionText1.innerHTML = this.alt;
+      }
+      img3.onclick = function(){
+        modal1.style.display = "block";
+        modalImg1.src = this.src;
+        captionText1.innerHTML = this.alt;
+      }
+      img4.onclick = function(){
+        modal1.style.display = "block";
+        modalImg1.src = this.src;
+        captionText1.innerHTML = this.alt;
+      }
+      img5.onclick = function(){
+        modal1.style.display = "block";
+        modalImg1.src = this.src;
+        captionText1.innerHTML = this.alt;
+      }
+
+      </script>
+  </body>
+</html>
+
+
